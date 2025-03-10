@@ -11,7 +11,9 @@ import org.testng.Assert;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BuyMultipleItems {
     public static void main(String[] args) {
@@ -83,6 +85,49 @@ public class BuyMultipleItems {
         for (String item : elements_to_buy) {
             Assert.assertTrue(items_text.contains(item), "Item not in payment page: " + item_title);
         }
+
+
+        //select country
+        String xpath_input_dropdown = "//input[@placeholder='Select Country']";
+        String country = "Peru";
+        driver.findElement(By.xpath(xpath_input_dropdown)).sendKeys(country);
+
+        String xpath_dropdown_options = "//span[normalize-space(text())='%s']";
+        String format_option = String.format(xpath_dropdown_options,country);
+        driver.findElement(By.xpath(format_option)).click();
+
+
+        // paid button
+        String xpath_place_order = "//a[normalize-space(text())='Place Order']";
+        driver.findElement(By.xpath(xpath_place_order)).click();
+
+        // save orders
+        List<WebElement> orders = driver.findElements(By.xpath("//label[contains(@class, 'ng-star-inserted')]"));
+        List<String> orders_list = orders.stream().map(WebElement::getText).toList();
+
+        List<String> clean_list = orders_list.stream().map(s -> s.replaceAll("[|\\s]", "")).toList();
+
+        System.out.println("lists of orders");
+        System.out.println(clean_list);
+
+        // go to orders
+        WebElement ordersButton = driver.findElement(By.xpath("//button[@routerlink='/dashboard/myorders']"));
+        actions.moveToElement(ordersButton).perform();
+        ordersButton.click();
+
+
+        // list of orders
+        List<WebElement> orders_history = driver.findElements(By.xpath("//tbody//tr/th"));
+        List<String> orders_history_list = orders_history.stream().map(WebElement::getText).toList();
+
+
+        for (String item_order : clean_list) {
+            Assert.assertTrue(orders_history_list.contains(item_order), "Order not in payment page: " + item_title);
+        }
+
+
+
+
 
     }
 }
