@@ -3,6 +3,7 @@ package pageObjects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -17,9 +18,19 @@ public class AbstractComponent {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
     }
 
+    @FindBy(css = "[routerlink*='cart']")
+    WebElement cartHeader;
+
+    @FindBy(css = "[routerlink*='myorders']")
+    WebElement orderHeader;
 
     public void waitForWebElementToAppear(WebElement webElement) {
         wait.until(ExpectedConditions.visibilityOf(webElement));
+    }
+
+    public CartPage goToCartPage() {
+        cartHeader.click();
+        return new CartPage(driver);
     }
 
 }
