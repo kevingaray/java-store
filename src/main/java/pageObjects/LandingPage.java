@@ -30,10 +30,12 @@ public class LandingPage extends AbstractComponent {
         driver.get("https://rahulshettyacademy.com/client/");
     }
 
-    public void loginApplication(String email, String password) {
+    public ProductsCatalog loginApplication(String email, String password) {
         EmailInput.sendKeys(email);
         PasswordInput.sendKeys(password);
         submitButton.click();
+        return new ProductsCatalog(driver);
+
     }
 
     public String getAlertMessage() {

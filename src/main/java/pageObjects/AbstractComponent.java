@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class AbstractComponent {
     WebDriver driver;
@@ -26,6 +27,14 @@ public class AbstractComponent {
 
     public void waitForWebElementToAppear(WebElement webElement) {
         wait.until(ExpectedConditions.visibilityOf(webElement));
+    }
+
+    public void waitForWebElementToAppear(List<WebElement> webElementList) {
+        wait.until(ExpectedConditions.visibilityOfAllElements(webElementList));
+    }
+
+    public void waitForElementToDisappear(WebElement webElement) throws InterruptedException {
+        wait.until(ExpectedConditions.invisibilityOf(webElement));
     }
 
     public CartPage goToCartPage() {

@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 
 public class CartPage extends AbstractComponent {
     WebDriver driver;
@@ -21,6 +23,9 @@ public class CartPage extends AbstractComponent {
     @FindBy(xpath = "//h1[@style='color: lightgray;']")
     WebElement title;
 
+    @FindBy(css = ".cartSection h3")
+    List<WebElement> cartProducts;
+
 
     public String getAlertMessage() {
         waitForWebElementToAppear(alert);
@@ -32,17 +37,18 @@ public class CartPage extends AbstractComponent {
         return title.getText();
     }
 
+    public Boolean VerifyProductDisplay(String name) {
+        waitForWebElementToAppear(cartProducts);
+        return cartProducts.stream().anyMatch(cartProduct -> cartProduct.getText().equalsIgnoreCase(name));
+        //cartProducts.forEach(product -> System.out.println(product.getText()));
+        //return true;
+    }
 
-//    @FindBy(css = ".cartSection h3")
-//    List<WebElement> cartProducts;
-//
+
 //    @FindBy(css = ".totalRow button")
 //    WebElement checkOuElement;
 //
-//    public Boolean VerifyProductDisplay(String productName) {
-//        return cartProducts.stream().anyMatch(cartProduct -> cartProduct.getText().equalsIgnoreCase(productName));
-//    }
-//
+
 //    public CheckoutPage goToCheckOut(){
 //        checkOuElement.click();
 //        return new CheckoutPage(driver);
