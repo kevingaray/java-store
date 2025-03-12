@@ -40,8 +40,14 @@ public class CartPage extends AbstractComponent {
     public Boolean VerifyProductDisplay(String name) {
         waitForWebElementToAppear(cartProducts);
         return cartProducts.stream().anyMatch(cartProduct -> cartProduct.getText().equalsIgnoreCase(name));
-        //cartProducts.forEach(product -> System.out.println(product.getText()));
-        //return true;
+    }
+
+    public boolean VerifyProductsDisplay(List<String> names) {
+        waitForWebElementToAppear(cartProducts);
+        return names.stream()
+                .allMatch(name -> cartProducts.stream()
+                        .anyMatch(cartProduct -> cartProduct.getText().equalsIgnoreCase(name))
+                );
     }
 
 

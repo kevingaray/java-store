@@ -33,7 +33,7 @@ public class AbstractComponent {
         wait.until(ExpectedConditions.visibilityOfAllElements(webElementList));
     }
 
-    public void waitForElementToDisappear(WebElement webElement) throws InterruptedException {
+    public void waitForElementToDisappear(WebElement webElement) {
         wait.until(ExpectedConditions.invisibilityOf(webElement));
     }
 

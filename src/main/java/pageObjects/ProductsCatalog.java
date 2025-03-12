@@ -28,8 +28,6 @@ public class ProductsCatalog extends AbstractComponent {
 
     @FindBy(css = "[routerlink*='cart'] label")
     WebElement labelNumber;
-    ;
-
     By addToCart = By.cssSelector(".card-body button:last-of-type");
 
     public List<WebElement> getProductList() {
@@ -52,6 +50,17 @@ public class ProductsCatalog extends AbstractComponent {
     public int getCartNumber() {
         wait.until(driver -> !labelNumber.getText().isEmpty());
         return Integer.parseInt(labelNumber.getText());
+    }
+
+    public void addProductsToCart(List<String> productsList) {
+        for (String product : productsList) {
+            try {
+                addProductToCart(product);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Error adding product: " + product, e);
+            }
+        }
     }
 
 
