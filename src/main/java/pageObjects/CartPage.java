@@ -1,5 +1,6 @@
 package pageObjects;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,6 +27,8 @@ public class CartPage extends AbstractComponent {
     @FindBy(css = ".cartSection h3")
     List<WebElement> cartProducts;
 
+    String delete_item_xpath = "//div[@class='infoWrap'][.//h3[normalize-space()='%s']]//button[contains(@class, 'btn-danger')]";
+
 
     public String getAlertMessage() {
         waitForWebElementToAppear(alert);
@@ -49,6 +52,20 @@ public class CartPage extends AbstractComponent {
                         .anyMatch(cartProduct -> cartProduct.getText().equalsIgnoreCase(name))
                 );
     }
+
+    public List<String> getProductList() {
+        waitForWebElementToAppear(cartProducts);
+        return cartProducts.stream().map(WebElement::getText).toList();
+    }
+
+
+    public void removeItem(String item){
+        String remove_item_button_xpath = String.format(delete_item_xpath,item);
+        driver.findElement(By.xpath(remove_item_button_xpath)).click();
+    }
+
+
+
 
 
 //    @FindBy(css = ".totalRow button")

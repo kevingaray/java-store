@@ -48,8 +48,17 @@ public class ProductsCatalog extends AbstractComponent {
     }
 
     public int getCartNumber() {
-        wait.until(driver -> !labelNumber.getText().isEmpty());
+        wait.until(_ -> !labelNumber.getText().isEmpty());
         return Integer.parseInt(labelNumber.getText());
+    }
+
+    public void waitUpdateCartNumber() {
+        String previousValue = labelNumber.getText();
+
+        wait.until(_ -> {
+            String currentValue = labelNumber.getText();
+            return !currentValue.isEmpty() && !currentValue.equals(previousValue);
+        });
     }
 
     public void addProductsToCart(List<String> productsList) {
