@@ -28,7 +28,7 @@ public class CartPage extends AbstractComponent {
     List<WebElement> cartProducts;
 
     String delete_item_xpath = "//div[@class='infoWrap'][.//h3[normalize-space()='%s']]//button[contains(@class, 'btn-danger')]";
-
+    String buy_item_xpath = "//div[@class='infoWrap'][.//h3[normalize-space()='%s']]//button[contains(@class, 'btn-primary')]";
 
     public String getAlertMessage() {
         waitForWebElementToAppear(alert);
@@ -64,6 +64,12 @@ public class CartPage extends AbstractComponent {
         driver.findElement(By.xpath(remove_item_button_xpath)).click();
     }
 
+    public PaymentPage buyItem(String item) {
+        waitForWebElementToAppear(cartProducts);
+        String buy_now_xpath = String.format(buy_item_xpath, item);
+        driver.findElement(By.xpath(buy_now_xpath)).click();
+        return new PaymentPage(driver);
+    }
 
 
 
