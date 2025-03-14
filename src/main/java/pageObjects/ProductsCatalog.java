@@ -29,7 +29,10 @@ public class ProductsCatalog extends AbstractComponent {
 
     @FindBy(css = "[routerlink*='cart'] label")
     WebElement labelNumber;
+
+    // items
     By addToCart = By.cssSelector(".card-body button:last-of-type");
+    By viewDetails = By.cssSelector(".card-body button:first-of-type");
 
     public List<WebElement> getProductList() {
         waitForWebElementToAppear(products);
@@ -75,6 +78,13 @@ public class ProductsCatalog extends AbstractComponent {
                 throw new RuntimeException("Error adding product: " + product, e);
             }
         }
+    }
+
+    public ProductsDetail viewDetailsOfProduct(String productName){
+        WebElement prod = getProductByName(productName);
+        prod.findElement(viewDetails).click();
+        return new ProductsDetail(driver);
+
     }
 
 
