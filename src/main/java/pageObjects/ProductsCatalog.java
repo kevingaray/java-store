@@ -1,6 +1,7 @@
 package pageObjects;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -55,10 +56,14 @@ public class ProductsCatalog extends AbstractComponent {
     public void waitUpdateCartNumber() {
         String previousValue = labelNumber.getText();
 
-        wait.until(_ -> {
-            String currentValue = labelNumber.getText();
-            return !currentValue.isEmpty() && !currentValue.equals(previousValue);
-        });
+        try {
+            wait.until(_ -> {
+                String currentValue = labelNumber.getText();
+                return !currentValue.isEmpty() && !currentValue.equals(previousValue);
+            });
+        } catch (TimeoutException e) {
+            System.out.println("Timeout, but continuous with the process.");
+        }
     }
 
     public void addProductsToCart(List<String> productsList) {

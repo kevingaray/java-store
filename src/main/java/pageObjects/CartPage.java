@@ -3,6 +3,7 @@ package pageObjects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -27,6 +28,10 @@ public class CartPage extends AbstractComponent {
     @FindBy(css = ".cartSection h3")
     List<WebElement> cartProducts;
 
+    @FindBy(css = ".totalRow button")
+    WebElement checkoutElement;
+
+
     String delete_item_xpath = "//div[@class='infoWrap'][.//h3[normalize-space()='%s']]//button[contains(@class, 'btn-danger')]";
     String buy_item_xpath = "//div[@class='infoWrap'][.//h3[normalize-space()='%s']]//button[contains(@class, 'btn-primary')]";
 
@@ -47,10 +52,7 @@ public class CartPage extends AbstractComponent {
 
     public boolean VerifyProductsDisplay(List<String> names) {
         waitForWebElementToAppear(cartProducts);
-        return names.stream()
-                .allMatch(name -> cartProducts.stream()
-                        .anyMatch(cartProduct -> cartProduct.getText().equalsIgnoreCase(name))
-                );
+        return names.stream().allMatch(name -> cartProducts.stream().anyMatch(cartProduct -> cartProduct.getText().equalsIgnoreCase(name)));
     }
 
     public List<String> getProductList() {
@@ -59,8 +61,8 @@ public class CartPage extends AbstractComponent {
     }
 
 
-    public void removeItem(String item){
-        String remove_item_button_xpath = String.format(delete_item_xpath,item);
+    public void removeItem(String item) {
+        String remove_item_button_xpath = String.format(delete_item_xpath, item);
         driver.findElement(By.xpath(remove_item_button_xpath)).click();
     }
 
@@ -71,15 +73,10 @@ public class CartPage extends AbstractComponent {
         return new PaymentPage(driver);
     }
 
-
-
-
-//    @FindBy(css = ".totalRow button")
-//    WebElement checkOuElement;
-//
-
-//    public CheckoutPage goToCheckOut(){
-//        checkOuElement.click();
-//        return new CheckoutPage(driver);
-//    }
+    public CheckoutPage goToCheckOut() {
+        Actions actions = new Actions(driver);
+        actions.moveToElement(checkoutElement).perform();
+        checkoutElement.click();
+        return new CheckoutPage(driver);
+    }
 }
