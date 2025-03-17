@@ -14,7 +14,6 @@ import pageObjects.LandingPage;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import java.time.Duration;
 import java.util.Properties;
 
 public class BaseTest {
@@ -31,7 +30,6 @@ public class BaseTest {
         boolean headless = System.getProperty("headless") != null ? Boolean.parseBoolean(System.getProperty("headless")) : Boolean.parseBoolean(prop.getProperty("headless"));
         int width = System.getProperty("width") != null ? Integer.parseInt(System.getProperty("width")) : Integer.parseInt(prop.getProperty("width"));
         int height = System.getProperty("height") != null ? Integer.parseInt(System.getProperty("height")) : Integer.parseInt(prop.getProperty("height"));
-        int implicitWait = System.getProperty("implicitWait") != null ? Integer.parseInt(System.getProperty("implicitWait")) : Integer.parseInt(prop.getProperty("implicitWait"));
 
         switch (browserName.toLowerCase()) {
             case "chrome":
@@ -60,7 +58,6 @@ public class BaseTest {
             default:
                 throw new IllegalArgumentException("Browser not supported: " + browserName);
         }
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWait));
         driver.manage().window().setSize(new Dimension(width, height));
         return driver;
     }
