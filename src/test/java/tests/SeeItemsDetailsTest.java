@@ -14,6 +14,7 @@ public class SeeItemsDetailsTest extends BaseTest {
         String pass = "Iamking123";
         String item_title = "ADIDAS ORIGINAL";
         landingPage.goTo();
+
         ProductsCatalog productsCatalog = landingPage.loginApplication(email, pass);
         ProductsDetail productsDetail = productsCatalog.viewDetailsOfProduct(item_title);
         Assert.assertEquals(productsDetail.getProductName(), item_title);

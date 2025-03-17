@@ -17,12 +17,10 @@ public class RemoveItemTest extends BaseTest {
 
         landingPage.goTo();
         ProductsCatalog productsCatalog = landingPage.loginApplication(email, pass);
-
         productsCatalog.addProductsToCart(items);
         Assert.assertEquals(productsCatalog.getCartNumber(), items.size());
 
         CartPage cartPage = productsCatalog.goToCartPage();
-
         List<String> before_delete_list = cartPage.getProductList();
         cartPage.removeItem(items.get(1));
         productsCatalog.waitUpdateCartNumber();

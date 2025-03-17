@@ -35,6 +35,7 @@ public class AbstractComponent {
     }
 
     public CartPage goToCartPage() {
+        waitForWebElementToAppear(cartHeader);
         cartHeader.click();
         return new CartPage(driver);
     }
