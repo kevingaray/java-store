@@ -1,19 +1,27 @@
 package TestComponents;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import pageObjects.LandingPage;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 public class BaseTest {
@@ -75,4 +83,20 @@ public class BaseTest {
         driver.close();
     }
 
+
+    public static String getScreenshot(String testCaseName, WebDriver driver) {
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String screenshotDir = System.getProperty("user.dir") + File.separator + "reports";
+        String screenshotPath = screenshotDir + File.separator + testCaseName + "_" + timestamp + ".jpg";
+
+        try {
+            TakesScreenshot ts = (TakesScreenshot) driver;
+            File source = ts.getScreenshotAs(OutputType.FILE);
+            FileUtils.copyFile(source, new File(screenshotPath));
+            return screenshotPath;
+        } catch (IOException e) {
+            System.err.println("Error trying to save screenshot " + e.getMessage());
+            return null;
+        }
+    }
 }
