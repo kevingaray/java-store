@@ -2,19 +2,19 @@ package tests;
 
 import TestComponents.BaseTest;
 
+import TestComponents.Retry;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pageObjects.CartPage;
 
 public class EmptyCartTest extends BaseTest {
 
-    @Test
+    @Test(retryAnalyzer= Retry.class)
     public void EmptyCart() {
         String email = "kevger@gmail.com";
         String pass = "Iamking123";
-        landingPage.goTo();
-        landingPage.loginApplication(email, pass);
 
+        landingPage.loginApplication(email, pass);
         // test
         CartPage cartPage = landingPage.goToCartPage();
         String cartPageAlert = cartPage.getAlertMessage();

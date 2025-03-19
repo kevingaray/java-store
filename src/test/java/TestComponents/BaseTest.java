@@ -11,87 +11,87 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 
+import org.openqa.selenium.support.ThreadGuard;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import pageObjects.LandingPage;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 
 public class BaseTest {
-    public WebDriver driver;
+    private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     public LandingPage landingPage;
 
-    public WebDriver initializeDriver() throws IOException {
 
-        Properties prop = new Properties();
-        FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "/src/main/resources/global.properties");
-        prop.load(fis);
+    public void initializeDriver(){
 
-        String browserName = System.getProperty("browser") != null ? System.getProperty("browser") : prop.getProperty("browser");
-        boolean headless = System.getProperty("headless") != null ? Boolean.parseBoolean(System.getProperty("headless")) : Boolean.parseBoolean(prop.getProperty("headless"));
-        int width = System.getProperty("width") != null ? Integer.parseInt(System.getProperty("width")) : Integer.parseInt(prop.getProperty("width"));
-        int height = System.getProperty("height") != null ? Integer.parseInt(System.getProperty("height")) : Integer.parseInt(prop.getProperty("height"));
+        String browserName = System.getProperty("browser", ConfigReader.getProperty("browser"));
+        boolean headless = Boolean.parseBoolean(System.getProperty("headless", ConfigReader.getProperty("headless")));
+        int width = Integer.parseInt(System.getProperty("width", ConfigReader.getProperty("width")));
+        int height = Integer.parseInt(System.getProperty("height", ConfigReader.getProperty("height")));
 
         switch (browserName.toLowerCase()) {
             case "chrome":
                 ChromeOptions options = new ChromeOptions();
                 if (headless) {
-                    options.addArguments("headless");
+                    options.addArguments("--headless=new");
                 }
-                driver = new ChromeDriver(options);
+                driver.set(ThreadGuard.protect(new ChromeDriver(options)));
                 break;
             case "firefox":
-                driver = new FirefoxDriver();
+                driver.set(ThreadGuard.protect(new FirefoxDriver()));
                 break;
             case "edge":
-                driver = new EdgeDriver();
+                driver.set(ThreadGuard.protect(new EdgeDriver()));
                 break;
             case "remote":
-//                to try later
-//                try {
-//                    DesiredCapabilities capabilities = new DesiredCapabilities();
-//                    capabilities.setBrowserName("chrome");
-//                    driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), capabilities);
-//                } catch (MalformedURLException e) {
-//                    throw new RuntimeException("URL de Selenium Grid incorrecta", e);
-//                }
-                break;
+                // Preparado para Selenium Grid en el futuro
+                // driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), new ChromeOptions());
+                throw new UnsupportedOperationException("Remote execution is not yet implemented.");
             default:
                 throw new IllegalArgumentException("Browser not supported: " + browserName);
         }
-        driver.manage().window().setSize(new Dimension(width, height));
-        return driver;
+        getDriver().manage().window().setSize(new Dimension(width, height));
     }
 
+    public WebDriver getDriver() {
+        return driver.get();
+    }
+
+
     @BeforeMethod(alwaysRun = true)
-    public LandingPage launchApplication() throws IOException {
-        driver = initializeDriver();
-        landingPage = new LandingPage(driver);
+    public void launchApplication() {
+        initializeDriver();
+        landingPage = new LandingPage(getDriver());
         landingPage.goTo();
-        return landingPage;
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
-        driver.close();
+        WebDriver driver = getDriver();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
 
     public static String getScreenshot(String testCaseName, WebDriver driver) {
+        if (driver == null) {
+            System.err.println("No WebDriver instance available for screenshot.");
+            return null;
+        }
+
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String screenshotDir = System.getProperty("user.dir") + File.separator + "reports";
         String screenshotPath = screenshotDir + File.separator + testCaseName + "_" + timestamp + ".jpg";
 
         try {
-            TakesScreenshot ts = (TakesScreenshot) driver;
-            File source = ts.getScreenshotAs(OutputType.FILE);
+            File source = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(source, new File(screenshotPath));
             return screenshotPath;
         } catch (IOException e) {

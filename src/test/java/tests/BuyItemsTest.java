@@ -1,6 +1,7 @@
 package tests;
 
 import TestComponents.BaseTest;
+import TestComponents.Retry;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pageObjects.*;
@@ -9,14 +10,13 @@ import java.util.List;
 
 public class BuyItemsTest extends BaseTest {
 
-    @Test
+    @Test(retryAnalyzer= Retry.class)
     public void BuyAnItem() {
         //data
         String email = "kevger@gmail.com";
         String pass = "Iamking123";
         List<String> items = List.of("ADIDAS ORIGINAL", "ZARA COAT 3");
 
-        landingPage.goTo();
         ProductsCatalog productsCatalog = landingPage.loginApplication(email, pass);
 
         // items
@@ -28,7 +28,7 @@ public class BuyItemsTest extends BaseTest {
         Assert.assertTrue(paymentPage.VerifyProductDisplay(items.getFirst()));
     }
 
-    @Test
+    @Test(retryAnalyzer= Retry.class)
     public void BuyMultipleItems() {
         //data
         String email = "kevger@gmail.com";

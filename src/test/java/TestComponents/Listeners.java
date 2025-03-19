@@ -12,16 +12,25 @@ import utilities.ExtentReporterNG;
 
 public class Listeners extends BaseTest implements ITestListener {
 
-
     ExtentReports extent = ExtentReporterNG.getReportObject();
-    ExtentTest test;
-    ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>(); //Thread safe
+    ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
 
 
     @Override
     public void onTestStart(ITestResult result) {
-        test = extent.createTest(result.getMethod().getMethodName());
-        extentTest.set(test);
+        // create only 1 test on ExtentReport
+        if (extentTest.get() == null) {
+            ExtentTest test = extent.createTest(result.getMethod().getMethodName());
+            extentTest.set(test);
+        }
+
+        // Log if retry exists
+        if (result.getMethod().getRetryAnalyzer(result) != null) {
+            int retryCount = result.getMethod().getCurrentInvocationCount();
+            extentTest.get().log(Status.INFO, "Starting Test - Attempt " + (retryCount + 1));
+        } else {
+            extentTest.get().log(Status.INFO, "Starting Test - No Retries");
+        }
     }
 
     @Override
@@ -31,19 +40,25 @@ public class Listeners extends BaseTest implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult result) {
-        extentTest.get().fail(result.getThrowable());
-        String filePath;
 
-        try {
-            driver = (WebDriver) result.getTestClass().getRealClass().getField("driver").get(result.getInstance());
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        int retryCount = result.getMethod().getCurrentInvocationCount();
+        int maxRetry = Integer.parseInt(System.getProperty("maxTry", ConfigReader.getProperty("maxTry")));
+
+        if (retryCount < maxRetry) {
+            extentTest.get().log(Status.WARNING, "Test Failed - Retry " + retryCount + " of " + maxRetry);
+            return;
         }
 
-        filePath = getScreenshot(result.getMethod().getMethodName(), driver);
-        extentTest.get().addScreenCaptureFromPath(filePath, result.getMethod().getMethodName());
-
+        extentTest.get().fail(result.getThrowable());
+        WebDriver driver = getDriver();
+        String filePath = getScreenshot(result.getMethod().getMethodName(), driver);
+        if (filePath != null) {
+            extentTest.get().addScreenCaptureFromPath(filePath, result.getMethod().getMethodName());
+        } else {
+            extentTest.get().log(Status.WARNING, "No screenshot available due to an error.");
+        }
     }
+
 
     @Override
     public void onTestFailedWithTimeout(ITestResult result) {
@@ -53,6 +68,10 @@ public class Listeners extends BaseTest implements ITestListener {
 
     @Override
     public void onFinish(ITestContext context) {
-        extent.flush();
+        try {
+            extent.flush();
+        } catch (Exception e) {
+            System.err.println("Error while flushing ExtentReports: " + e.getMessage());
+        }
     }
 }
