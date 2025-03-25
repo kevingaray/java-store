@@ -25,6 +25,7 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.7.0</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -33,10 +34,11 @@
             <version>5.0.9</version>
         </dependency>
 
+
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
-            <version>7.5.0</version>
+            <version>7.20.1</version>
         </dependency>
 
         <dependency>
@@ -51,23 +53,29 @@
             <version>2.18.0</version>
         </dependency>
 
+
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M6</version>
-                <configuration>
-                    <includes>
-                        <include>**/TestNGTestRunner.java</include>
-                    </includes>
-                </configuration>
-            </plugin>
-        </plugins>
+    <profiles>
+        <profile>
+            <id>cucumber-runner</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.1.2</version>
+                        <configuration>
+                            <includes>
+                                <include>**/TestNGTestRunner.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
-    </build>
 
 
 </project>
