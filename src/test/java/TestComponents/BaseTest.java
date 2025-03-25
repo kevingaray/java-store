@@ -65,10 +65,11 @@ public class BaseTest {
 
 
     @BeforeMethod(alwaysRun = true)
-    public void launchApplication() {
+    public LandingPage launchApplication() {
         initializeDriver();
         landingPage = new LandingPage(getDriver());
         landingPage.goTo();
+        return landingPage;
     }
 
     @AfterMethod(alwaysRun = true)
