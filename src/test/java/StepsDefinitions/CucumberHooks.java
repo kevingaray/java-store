@@ -7,6 +7,7 @@ public class CucumberHooks extends BaseTest {
 
     @After
     public void close_driver(){
+        ThreadLocalContext.remove();
         tearDown();
     }
 }
