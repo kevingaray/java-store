@@ -1,5 +1,6 @@
 package pageObjects;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,6 +27,14 @@ public class AbstractComponent {
         wait.until(ExpectedConditions.visibilityOf(webElement));
     }
 
+    public void waitForElementToBeClickable(WebElement webElement) {
+        wait.until(ExpectedConditions.elementToBeClickable(webElement));
+    }
+
+    public WebElement waitForElementToBePresent(By locator) {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+    }
+
     public void waitForWebElementToAppear(List<WebElement> webElementList) {
         wait.until(ExpectedConditions.visibilityOfAllElements(webElementList));
     }
@@ -35,7 +44,6 @@ public class AbstractComponent {
     }
 
     public CartPage goToCartPage() {
-        waitForWebElementToAppear(cartHeader);
         cartHeader.click();
         return new CartPage(driver);
     }

@@ -63,7 +63,8 @@ public class CartPage extends AbstractComponent {
 
     public void removeItem(String item) {
         String remove_item_button_xpath = String.format(delete_item_xpath, item);
-        driver.findElement(By.xpath(remove_item_button_xpath)).click();
+        WebElement remove_button  = waitForElementToBePresent(By.xpath(remove_item_button_xpath));
+        remove_button.click();
     }
 
     public PaymentPage buyItem(String item) {

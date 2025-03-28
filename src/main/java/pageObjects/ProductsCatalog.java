@@ -46,6 +46,8 @@ public class ProductsCatalog extends AbstractComponent {
 
     public void addProductToCart(String productName) throws InterruptedException {
         WebElement prod = getProductByName(productName);
+        waitForElementToDisappear(spinner);
+        waitForElementToBeClickable(prod.findElement(addToCart));
         prod.findElement(addToCart).click();
         waitForWebElementToAppear(toastMessage);
         waitForElementToDisappear(spinner);
@@ -85,6 +87,13 @@ public class ProductsCatalog extends AbstractComponent {
         prod.findElement(viewDetails).click();
         return new ProductsDetail(driver);
 
+    }
+
+    public CartPage goToCartPage() {
+        waitForElementToDisappear(spinner);
+        waitForElementToBeClickable(cartHeader);
+        cartHeader.click();
+        return new CartPage(driver);
     }
 
 
