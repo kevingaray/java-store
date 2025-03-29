@@ -6,6 +6,8 @@ import io.cucumber.java.en.When;
 import pageObjects.CartPage;
 import pageObjects.ProductsCatalog;
 
+import java.util.List;
+
 public class CartSteps extends BaseTest {
     public CartPage cartPage = (CartPage) ThreadLocalContext.get("cartPage");
 
@@ -29,8 +31,14 @@ public class CartSteps extends BaseTest {
         assert cartPageTitle.equals("No Products in Your Cart !");
     }
 
-    @Then("^(.+) should be displayed in the cart$")
+    @Then("^only the item (.+) should be displayed in the cart$")
     public void should_be_displayed_in_the_cart(String item) {
         assert cartPage.VerifyProductDisplay(item);
+    }
+
+    @Then("^\\b([^\\\"]+)\\b and \\b([^\\\"]+)\\b should be displayed in the cart$")
+    public void verifyMultipleProductsInCart(String product1, String product2) {
+        List<String> items = List.of(product1, product2);
+        assert cartPage.VerifyProductsDisplay(items);
     }
 }

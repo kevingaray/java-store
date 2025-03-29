@@ -25,8 +25,20 @@ Feature: carts
     When Added product <product1> to cart
     Then It should increase to <cart_number> the cart number
     When I go to cart page
-    Then <product1> should be displayed in the cart
+    Then only the item <product1> should be displayed in the cart
 
     Examples:
       | product1        | cart_number |
       | ADIDAS ORIGINAL | 1           |
+
+
+  @DisplayMultipleItems
+  Scenario Outline: Add an item to cart
+    When Added products <product1> and <product2> to cart
+    Then It should increase to <cart_number> the cart number
+    When I go to cart page
+    Then <product1> and <product2> should be displayed in the cart
+
+    Examples:
+      | product1        | product2    | cart_number |
+      | ADIDAS ORIGINAL | ZARA COAT 3 | 2           |
