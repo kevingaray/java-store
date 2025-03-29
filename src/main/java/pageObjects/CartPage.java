@@ -67,14 +67,16 @@ public class CartPage extends AbstractComponent {
         remove_button.click();
     }
 
-    public PaymentPage buyItem(String item) {
+    public CheckoutPage buyItem(String item) {
         waitForWebElementToAppear(cartProducts);
         String buy_now_xpath = String.format(buy_item_xpath, item);
         driver.findElement(By.xpath(buy_now_xpath)).click();
-        return new PaymentPage(driver);
+        return new CheckoutPage(driver);
     }
 
     public CheckoutPage goToCheckOut() {
+        waitForWebElementToAppear(checkoutElement);
+        waitForElementToBeClickable(checkoutElement);
         Actions actions = new Actions(driver);
         actions.moveToElement(checkoutElement).perform();
         checkoutElement.click();

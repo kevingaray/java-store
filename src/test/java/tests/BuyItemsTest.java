@@ -24,8 +24,8 @@ public class BuyItemsTest extends BaseTest {
         CartPage cartPage = productsCatalog.goToCartPage();
 
         // buy item
-        PaymentPage paymentPage = cartPage.buyItem(items.getFirst());
-        Assert.assertTrue(paymentPage.VerifyProductDisplay(items.getFirst()));
+        CheckoutPage checkoutPage = cartPage.buyItem(items.getFirst());
+        Assert.assertTrue(checkoutPage.VerifyProductDisplay(items.getFirst()));
     }
 
     @Test(retryAnalyzer= Retry.class)

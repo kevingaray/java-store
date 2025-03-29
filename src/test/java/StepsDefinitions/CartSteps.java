@@ -4,7 +4,7 @@ import TestComponents.BaseTest;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageObjects.CartPage;
-import pageObjects.PaymentPage;
+import pageObjects.CheckoutPage;
 import pageObjects.ProductsCatalog;
 
 import java.util.List;
@@ -45,7 +45,13 @@ public class CartSteps extends BaseTest {
 
     @When("^I buy the item (.+)$")
     public void i_buy_the_item(String product1) {
-        PaymentPage paymentPage = cartPage.buyItem(product1);
-        ThreadLocalContext.set("paymentPage", paymentPage);
+        CheckoutPage checkoutPage = cartPage.buyItem(product1);
+        ThreadLocalContext.set("checkoutPage", checkoutPage);
+    }
+
+    @When("I click the checkout button")
+    public void i_click_the_checkout_button() {
+        CheckoutPage checkoutPage = cartPage.goToCheckOut();
+        ThreadLocalContext.set("checkoutPage", checkoutPage);
     }
 }

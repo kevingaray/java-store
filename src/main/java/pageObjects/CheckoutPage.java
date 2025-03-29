@@ -44,4 +44,9 @@ public class CheckoutPage extends AbstractComponent {
         submit.click();
         return new ConfirmationPage(driver);
     }
+
+    public Boolean VerifyProductDisplay(String name) {
+        waitForWebElementToAppear(checkoutProducts);
+        return checkoutProducts.stream().anyMatch(cartProduct -> cartProduct.getText().equalsIgnoreCase(name));
+    }
 }
