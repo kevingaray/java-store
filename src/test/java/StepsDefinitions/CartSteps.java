@@ -4,6 +4,7 @@ import TestComponents.BaseTest;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageObjects.CartPage;
+import pageObjects.PaymentPage;
 import pageObjects.ProductsCatalog;
 
 import java.util.List;
@@ -40,5 +41,11 @@ public class CartSteps extends BaseTest {
     public void verifyMultipleProductsInCart(String product1, String product2) {
         List<String> items = List.of(product1, product2);
         assert cartPage.VerifyProductsDisplay(items);
+    }
+
+    @When("^I buy the item (.+)$")
+    public void i_buy_the_item(String product1) {
+        PaymentPage paymentPage = cartPage.buyItem(product1);
+        ThreadLocalContext.set("paymentPage", paymentPage);
     }
 }
