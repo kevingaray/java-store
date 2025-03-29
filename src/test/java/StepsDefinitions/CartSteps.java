@@ -20,4 +20,12 @@ public class CartSteps extends BaseTest {
         productsCatalog.waitUpdateCartNumber();
         assert !cartPage.VerifyProductDisplay(item);
     }
+
+    @Then("I should see an empty cart")
+    public void i_should_see_an_empty_cart() {
+        String cartPageAlert = cartPage.getAlertMessage();
+        String cartPageTitle = cartPage.getTitleMessage();
+        assert cartPageAlert.equals("No Product in Your Cart");
+        assert cartPageTitle.equals("No Products in Your Cart !");
+    }
 }
