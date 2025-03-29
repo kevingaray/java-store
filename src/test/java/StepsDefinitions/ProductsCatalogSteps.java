@@ -31,6 +31,18 @@ public class ProductsCatalogSteps extends BaseTest {
         productsCatalog.addProductsToCart(items);
     }
 
+    @When("^Added product (.+) to cart$")
+    public void add_product_to_cart(String item_title) throws InterruptedException {
+        productsCatalog.addProductToCart(item_title);
+    }
+
+    @Then("^It should increase to (.+) the cart number$")
+    public void it_should_increase_to_the_cart_number(String cart_number) {
+        int expectedCartNumber = Integer.parseInt(cart_number);
+        productsCatalog.waitUpdateCartNumber();
+        Assert.assertEquals(productsCatalog.getCartNumber(), expectedCartNumber);
+    }
+
     @When("I go to cart page")
     public void i_go_to_cart_page() {
         CartPage cartPage = productsCatalog.goToCartPage();

@@ -28,4 +28,9 @@ public class CartSteps extends BaseTest {
         assert cartPageAlert.equals("No Product in Your Cart");
         assert cartPageTitle.equals("No Products in Your Cart !");
     }
+
+    @Then("^(.+) should be displayed in the cart$")
+    public void should_be_displayed_in_the_cart(String item) {
+        assert cartPage.VerifyProductDisplay(item);
+    }
 }
