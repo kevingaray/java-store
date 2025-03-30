@@ -31,6 +31,9 @@ public class CartPage extends AbstractComponent {
     @FindBy(css = ".totalRow button")
     WebElement checkoutElement;
 
+    @FindBy(css = ".ngx-toastr.toast-success")
+    WebElement notification;
+
 
     String delete_item_xpath = "//div[@class='infoWrap'][.//h3[normalize-space()='%s']]//button[contains(@class, 'btn-danger')]";
     String buy_item_xpath = "//div[@class='infoWrap'][.//h3[normalize-space()='%s']]//button[contains(@class, 'btn-primary')]";
@@ -75,6 +78,7 @@ public class CartPage extends AbstractComponent {
     }
 
     public CheckoutPage goToCheckOut() {
+        waitForElementToDisappear(notification);
         waitForWebElementToAppear(checkoutElement);
         waitForElementToBeClickable(checkoutElement);
         Actions actions = new Actions(driver);

@@ -1,11 +1,9 @@
 Feature: buy
 
-  Background:
+  @BuySimpleItem @BuyItem
+  Scenario Outline: Buy an item
     Given I landed on Ecommerce Page
     When Logged in with correct credentials
-
-  @BuyItem
-  Scenario Outline: Buy an item
     When Added product <product> to cart
     When I go to cart page
     When I buy the item <product>
@@ -16,8 +14,10 @@ Feature: buy
       | ADIDAS ORIGINAL |
 
 
-  @BuyMultipleItems
+  @BuyMultipleItems @BuyItem
   Scenario Outline: Buy multiple items
+    Given I landed on Ecommerce Page
+    When Logged in with correct credentials
     When Added products <product1> and <product2> to cart
     When I go to cart page
     When I click the checkout button
