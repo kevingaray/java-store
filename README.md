@@ -46,7 +46,4 @@ Before getting started, make sure you have the following prerequisites:
 └── .gitignore
 ```
 # Running Examples
-## Remote and parallel execution
 ![Remote and parallel execution](https://vimeo.com/1073050033?share=copy#t=0)
-## Test buy items
-![Test buy items](https://vimeo.com/1073051293?share=copy#t=0)
