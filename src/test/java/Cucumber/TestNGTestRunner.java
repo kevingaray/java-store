@@ -8,8 +8,7 @@ import org.testng.annotations.Test;
         glue = "StepsDefinitions",
         monochrome = true,
         plugin = {"html:reports/cucumber.html"},
-        tags = "@BuyItem")
+        tags = "@BuyMultipleItems")
 
-@Test(retryAnalyzer = TestComponents.CucumberRetry.class)
 public class TestNGTestRunner extends AbstractTestNGCucumberTests {
 }
