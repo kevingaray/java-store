@@ -47,7 +47,7 @@ Before getting started, make sure you have the following prerequisites:
 ```
 # Running Examples
 ## Remote and parallel execution
-![Remote and parallel execution](https://vimeo.com/1073050033?share=copy#t=0)
+[Remote and parallel execution](https://vimeo.com/1073050033?share=copy#t=0)
 ## Buy items tests
-![Buy multiple tests](https://vimeo.com/1073051293?share=copy#t=0)
+[Buy multiple tests](https://vimeo.com/1073051293?share=copy#t=0)
 
